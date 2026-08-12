@@ -14,3 +14,18 @@
 Google Apps Script เดิมใช้ `google.script.run` ซึ่งใช้ได้เฉพาะหน้าเว็บที่เสิร์ฟจาก Apps Script จึงนำมาเรียกตรงจากเว็บไซต์ static ไม่ได้อย่างปลอดภัย ให้เพิ่ม API หลังบ้านที่คืน JSON หรือปรับ Apps Script ให้มี `doGet(e)` สำหรับ endpoint ข้อมูล แล้วเปลี่ยน data adapter ใน `app.js` ให้เรียก endpoint นั้น
 
 อย่าใส่รหัสผ่านหรือ secret ของ Google Sheet ในไฟล์หน้าเว็บสาธารณะ
+
+## วิธีเตรียม Google Form → Google Sheet
+
+1. เปิด Google Form แล้วไปที่แท็บ **คำตอบ** → กดไอคอน Google Sheets เพื่อสร้างชีตตอบกลับ
+2. ในชีตตอบกลับ ให้ตรวจชื่อแท็บเป็น `Form_Responses` และหัวคอลัมน์คำถามผู้สมัครเป็น `นายกในใจคุณ` หรือแก้ค่าคงที่ใน `google-apps-script/Code.gs`
+3. สร้างแท็บ `DashboardData` โดยใส่หัวตาราง: `หมายเลข | ชื่อ | ทีม/พรรค | นโยบาย | รูปภาพ` แล้วกรอกข้อมูลผู้สมัคร
+4. เปิด Extensions → Apps Script ในชีตนั้น วางโค้ดจาก `google-apps-script/Code.gs`
+5. Deploy → New deployment → Web app → Execute as Me → Who has access: Anyone → Deploy
+6. คัดลอก Web app URL มาใส่ใน `config.js` เป็น `apiUrl`
+
+ตัวอย่างแถว `DashboardData`:
+
+`1 | นางสาวตัวอย่าง | ทีมฟ้า | นโยบายของผู้สมัคร | https://.../photo.jpg`
+
+ข้อสำคัญ: เว็บ static ไม่ควรถือสิทธิ์แก้ไขชีตโดยตรง สำหรับการใช้งานจริงควรมี API สำหรับแอดมินแยกต่างหาก ส่วนไฟล์นี้เป็น endpoint อ่านผลคะแนนเพื่อเชื่อมหน้าเว็บ
